@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1006097237464",
+    "project_id": "color-detector-ad413",
+    "storage_bucket": "color-detector-ad413.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006097237464:android:e27a257fd9d84fcf6c5ead",
+        "android_client_info": {
+          "package_name": "com.example.color_detector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006097237464-k3p1jujqo3tdhm5hb8uj0ocblknq17nd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbPJtNVUvTmqRF965F-Tddk-yQK_xuaYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006097237464-k3p1jujqo3tdhm5hb8uj0ocblknq17nd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
