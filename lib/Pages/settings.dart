@@ -20,7 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNav(
-        currentIndex: 0, // Set current index according to the selected page
+        currentIndex: 1, // Set current index according to the selected page
         onTap: (index) {
           if (index == 0) {
             Navigator.pushReplacement(

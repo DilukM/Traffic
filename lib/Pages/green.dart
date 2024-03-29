@@ -22,6 +22,8 @@ class _GreenState extends State<Green> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   Color detectedColor = Colors.transparent;
+  double _zoomLevel = 1.0;
+  double _maxZoomLevel = 5.0;
 
   String label = '';
   double confidence = 0.0;
@@ -32,13 +34,22 @@ class _GreenState extends State<Green> {
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(widget.camera, ResolutionPreset.medium);
+    _controller = CameraController(widget.camera, ResolutionPreset.high);
     _initializeControllerFuture = _controller.initialize().then((_) async {
       await _tfLiteInit();
       if (!_isProcessingPaused) {
         await _startStreaming();
       }
     });
+  }
+
+  Future<void> _setZoom(double zoom) async {
+    if (zoom >= 1.0 && zoom <= _maxZoomLevel) {
+      await _controller.setZoomLevel(zoom);
+      setState(() {
+        _zoomLevel = zoom;
+      });
+    }
   }
 
   Future<void> _tfLiteInit() async {
@@ -191,45 +202,63 @@ class _GreenState extends State<Green> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Column(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.07,
-                ),
-                CameraPreview(_controller),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      label == "green"
-                          ? "Green color detected"
-                          : "Color not detected",
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: detectedColor,
-                      shape: BoxShape.rectangle,
-                      border: Border.all(color: Colors.grey, width: 2),
-                    ),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      CameraPreview(_controller),
+                      Positioned(
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                        child: Slider(
+                          activeColor: Color.fromARGB(255, 3, 65, 55),
+                          value: _zoomLevel,
+                          min: 1.0,
+                          max: _maxZoomLevel,
+                          onChanged: (value) {
+                            _setZoom(value);
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 120,
+                        right: 16,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: detectedColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey, width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // Container(
+                //   padding: const EdgeInsets.all(12),
+                //   decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(0.5),
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Text(
+                //       label == "green"
+                //           ? "Green color detected"
+                //           : "Color not detected",
+                //       style: const TextStyle(color: Colors.white),
+                //     ),
+                //   ),
+                // ),
+                //
               ],
             );
           } else {

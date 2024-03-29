@@ -32,14 +32,14 @@ class _RedHomeState extends State<RedHome> {
             height: 12,
           ),
           SizedBox(
-            height: 50,
+            height: 45,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   elevation: 3, // Remove elevation
                   shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                        color: Color.fromARGB(221, 45, 45, 45),
+                    side: BorderSide(
+                        color: const Color.fromARGB(221, 45, 45, 45),
                         width: 2), // Border color and width
                     borderRadius: BorderRadius.circular(50), // Border radius
                   ),
@@ -52,20 +52,24 @@ class _RedHomeState extends State<RedHome> {
                                 camera: widget.camera,
                               )));
                 },
-                child: const Text("Cancel")),
+                child: Text(
+                  "Cancel",
+                  style:
+                      TextStyle(color: const Color.fromARGB(221, 45, 45, 45)),
+                )),
           ),
-          const SizedBox(
+          SizedBox(
             height: 15,
           ),
           SizedBox(
-            height: 50,
+            height: 45,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   elevation: 3, // Remove elevation
                   shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                        color: Color.fromARGB(221, 45, 45, 45),
+                    side: BorderSide(
+                        color: const Color.fromARGB(221, 45, 45, 45),
                         width: 2), // Border color and width
                     borderRadius: BorderRadius.circular(50), // Border radius
                   ),
@@ -78,9 +82,13 @@ class _RedHomeState extends State<RedHome> {
                                 camera: widget.camera,
                               )));
                 },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Text("Set Camera"),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    "Set Camera",
+                    style:
+                        TextStyle(color: const Color.fromARGB(221, 45, 45, 45)),
+                  ),
                 )),
           ),
         ],
