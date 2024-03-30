@@ -39,7 +39,7 @@ class _RedHomeState extends State<RedHome> {
             height: 70,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: GradientSlideToAct(
                 onSubmit: () {
                   Navigator.pushReplacementNamed(context, '/red');
