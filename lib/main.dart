@@ -1,3 +1,10 @@
+import 'package:color_detector/Pages/green.dart';
+import 'package:color_detector/Pages/greenHome.dart';
+import 'package:color_detector/Pages/home.dart';
+import 'package:color_detector/Pages/red.dart';
+import 'package:color_detector/Pages/redHome.dart';
+import 'package:color_detector/Pages/settings.dart';
+import 'package:color_detector/Pages/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -23,16 +30,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Color Detector',
       theme: ThemeData(
         fontFamily: "Nunito",
         colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 46, 46, 46)),
         useMaterial3: true,
       ),
-      home: SignInScreen(
-        camera: camera,
-      ),
+      initialRoute: '/signin',
+      routes: {
+        '/signin': (context) => SignInScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/home': (context) => HomePage(),
+        '/greenhome': (context) => GreenHome(),
+        '/redhome': (context) => RedHome(),
+        '/settings': (context) => SettingsPage(),
+        '/green': (context) => Green(
+              camera: camera,
+            ),
+        '/red': (context) => Red(
+              camera: camera,
+            ),
+      },
     );
   }
 }

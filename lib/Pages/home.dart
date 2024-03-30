@@ -1,16 +1,11 @@
-import 'package:camera/camera.dart';
+import 'package:color_detector/Pages/BottomNav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:color_detector/Pages/greenHome.dart';
-import 'package:color_detector/Pages/redHome.dart';
 import 'package:color_detector/util/listTile.dart';
 
 class HomePage extends StatefulWidget {
-  final CameraDescription camera;
-
   const HomePage({
     Key? key,
-    required this.camera,
   }) : super(key: key);
 
   @override
@@ -21,6 +16,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNav(
+        currentIndex: 0, // Set current index according to the selected page
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (index == 1) {
+            Navigator.pushReplacementNamed(context, '/settings');
+          }
+        },
+      ),
       body: Column(
         children: [
           const Padding(
@@ -74,12 +79,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RedHome(
-                                      camera: widget.camera,
-                                    )));
+                        Navigator.pushReplacementNamed(context, '/redhome');
                       },
                       child: const listTile(
                         Imgpath: 'assets/red_dot.png',
@@ -88,12 +88,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GreenHome(
-                                      camera: widget.camera,
-                                    )));
+                        Navigator.pushReplacementNamed(context, '/greenhome');
                       },
                       child: const listTile(
                         Imgpath: 'assets/green_dot.png',

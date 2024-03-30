@@ -1,17 +1,15 @@
 import 'dart:async';
 
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:color_detector/Pages/home.dart';
-import 'package:color_detector/Pages/signup_screen.dart';
 import '../reusable_widgets/reusablewidgets.dart';
 
 class SignInScreen extends StatefulWidget {
-  final CameraDescription camera;
-  const SignInScreen({Key? key, required this.camera}) : super(key: key);
+  const SignInScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -33,14 +31,7 @@ class _SignInScreenState extends State<SignInScreen> {
       });
       if (_user != null) {
         // User is already signed in, navigate to home page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(
-              camera: widget.camera,
-            ),
-          ),
-        );
+        Navigator.pushReplacementNamed(context, '/home');
       }
     });
   }
@@ -147,12 +138,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage(
-                                        camera: widget.camera,
-                                      )));
+                          Navigator.pushReplacementNamed(context, '/home');
                         }
                       }).onError((error, stackTrace) {
                         print(error);
@@ -230,12 +216,7 @@ class _SignInScreenState extends State<SignInScreen> {
             style: TextStyle(color: Colors.blueGrey)),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SignUpScreen(
-                          camera: widget.camera,
-                        )));
+            Navigator.pushReplacementNamed(context, '/signup');
           },
           child: const Text("Create one",
               style:
@@ -287,14 +268,7 @@ class _SignInScreenState extends State<SignInScreen> {
         if (user != null) {
           print("User is signed in: $user");
           // Navigate to the home page
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(
-                camera: widget.camera,
-              ),
-            ),
-          );
+          Navigator.pushReplacementNamed(context, '/home');
           Fluttertoast.showToast(
             msg: "Signin Successful",
             toastLength: Toast.LENGTH_SHORT,

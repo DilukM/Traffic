@@ -1,13 +1,11 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
-import 'package:color_detector/Pages/green.dart';
-import 'package:color_detector/Pages/home.dart';
-import 'package:color_detector/Pages/settings.dart';
+import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 
 class GreenHome extends StatefulWidget {
-  final CameraDescription camera;
-  const GreenHome({super.key, required this.camera});
+  const GreenHome({
+    super.key,
+  });
 
   @override
   State<GreenHome> createState() => _GreenHomeState();
@@ -21,93 +19,51 @@ class _GreenHomeState extends State<GreenHome> {
         currentIndex: 0, // Set current index according to the selected page
         onTap: (index) {
           if (index == 0) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomePage(
-                          camera: widget.camera,
-                        )));
+            Navigator.pushReplacementNamed(context, '/home');
           } else if (index == 1) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SettingsPage(camera: widget.camera)));
+            Navigator.pushReplacementNamed(context, '/settings');
           }
         },
+      ),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/home');
+            },
+            icon: Icon(Icons.arrow_back_ios)),
       ),
       body: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 85, bottom: 20),
+            padding: EdgeInsets.only(bottom: 20),
             child: Text(
               "You choose alarm for green light",
               style: TextStyle(
                   fontSize: 23, color: Color.fromARGB(255, 85, 84, 84)),
             ),
           ),
-          Image.asset("assets/green.png"),
+          Image.asset("assets/green1.png"),
           SizedBox(
-            height: 12,
+            height: 70,
           ),
-          SizedBox(
-            height: 45,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 3, // Remove elevation
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: const Color.fromARGB(221, 45, 45, 45),
-                        width: 2), // Border color and width
-                    borderRadius: BorderRadius.circular(50), // Border radius
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                camera: widget.camera,
-                              )));
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GradientSlideToAct(
+                onSubmit: () {
+                  Navigator.pushReplacementNamed(context, '/green');
                 },
-                child: Text(
-                  "Cancel",
-                  style:
-                      TextStyle(color: const Color.fromARGB(221, 45, 45, 45)),
-                )),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          SizedBox(
-            height: 45,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 3, // Remove elevation
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: const Color.fromARGB(221, 45, 45, 45),
-                        width: 2), // Border color and width
-                    borderRadius: BorderRadius.circular(50), // Border radius
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Green(
-                                camera: widget.camera,
-                              )));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    "Set Camera",
-                    style:
-                        TextStyle(color: const Color.fromARGB(221, 45, 45, 45)),
-                  ),
-                )),
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                text: "Slide to set camera",
+                textStyle: TextStyle(color: Colors.black87),
+                submittedIcon: Icons.camera_alt_outlined,
+                backgroundColor: Colors.grey.withOpacity(0.3),
+                gradient: LinearGradient(colors: [
+                  const Color.fromARGB(255, 165, 255, 171),
+                  Color.fromARGB(255, 115, 201, 119),
+                ]),
+                dragableIconBackgroundColor:
+                    Color.fromARGB(255, 115, 201, 119)),
           ),
         ],
       ),

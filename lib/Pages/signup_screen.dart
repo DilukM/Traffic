@@ -1,16 +1,14 @@
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:color_detector/Pages/home.dart';
-import 'package:color_detector/Pages/signin_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../reusable_widgets/reusablewidgets.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final CameraDescription camera;
-  const SignUpScreen({Key? key, required this.camera}) : super(key: key);
+  const SignUpScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -178,11 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         User? user = userCredential.user;
                         if (user != null) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomePage(camera: widget.camera)));
+                          Navigator.pushReplacementNamed(context, '/home');
                         }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'email-already-in-use') {
@@ -270,12 +264,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.blueGrey)),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SignInScreen(
-                          camera: widget.camera,
-                        )));
+            Navigator.pushReplacementNamed(context, '/signin');
           },
           child: const Text("Sign in",
               style:
@@ -307,15 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Access the user's information
         final User? user = userCredential.user;
         if (user != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(
-                camera: widget.camera,
-                // Pass other necessary arguments if needed
-              ),
-            ),
-          );
+          Navigator.pushReplacementNamed(context, '/home');
         }
       }
     } catch (error) {

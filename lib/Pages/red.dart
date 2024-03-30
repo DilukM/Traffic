@@ -3,8 +3,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
-import 'package:color_detector/Pages/home.dart';
-import 'package:color_detector/Pages/settings.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Red extends StatefulWidget {
@@ -168,20 +166,10 @@ class _RedState extends State<Red> {
     // Navigate after processing has been paused
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(camera: widget.camera),
-          ),
-        );
+        Navigator.pushReplacementNamed(context, '/home');
         break;
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SettingsPage(camera: widget.camera),
-          ),
-        );
+        Navigator.pushReplacementNamed(context, '/settings');
         break;
     }
   }

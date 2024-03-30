@@ -13,15 +13,20 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      selectedItemColor: Color.fromARGB(255, 3, 65, 55),
       currentIndex: currentIndex,
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(
+            Icons.home,
+          ),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
+          icon: Icon(
+            Icons.settings,
+          ),
           label: 'Settings',
         ),
       ],
