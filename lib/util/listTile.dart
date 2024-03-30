@@ -15,13 +15,13 @@ class listTile extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade300,
-                offset: Offset(5, 5),
-                blurRadius: 4,
+                color: Theme.of(context).colorScheme.shadow,
+                offset: Offset(3, 3),
+                blurRadius: 7,
                 spreadRadius: 1,
               )
             ]),

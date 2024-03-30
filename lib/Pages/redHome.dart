@@ -15,6 +15,7 @@ class _RedHomeState extends State<RedHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -29,7 +30,8 @@ class _RedHomeState extends State<RedHome> {
             child: Text(
               "You choose alarm for red light",
               style: TextStyle(
-                  fontSize: 23, color: Color.fromARGB(255, 85, 84, 84)),
+                fontSize: 23,
+              ),
             ),
           ),
           Image.asset("assets/red1.png"),
@@ -45,9 +47,10 @@ class _RedHomeState extends State<RedHome> {
                 width: MediaQuery.of(context).size.width,
                 height: 60,
                 text: "Slide to set camera",
-                textStyle: TextStyle(color: Colors.black87),
+                textStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.tertiary),
                 submittedIcon: Icons.camera_alt_outlined,
-                backgroundColor: Colors.grey.withOpacity(0.3),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 gradient: LinearGradient(colors: [
                   Color.fromARGB(255, 255, 165, 165),
                   Color.fromARGB(255, 201, 115, 115),

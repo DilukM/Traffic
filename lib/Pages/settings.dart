@@ -1,8 +1,10 @@
+import 'package:color_detector/Theme/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -28,11 +30,32 @@ class _SettingsPageState extends State<SettingsPage> {
         },
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            signOut();
-          },
-          child: const Text('Logout'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.tertiary,
+              )),
+              onPressed: () {
+                signOut();
+              },
+              child: const Text('Logout'),
+            ),
+            // ElevatedButton(
+            //   style: ButtonStyle(
+            //       backgroundColor: WidgetStatePropertyAll(
+            //     Theme.of(context).colorScheme.tertiary,
+            //   )),
+            //   onPressed: () {
+            //     Provider.of<ThemeProvider>(context, listen: false)
+            //         .toggleTheme();
+            //   },
+            //   child: const Text('Change Theme'),
+            // ),
+          ],
         ),
       ),
     );

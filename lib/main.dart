@@ -5,10 +5,13 @@ import 'package:color_detector/Pages/red.dart';
 import 'package:color_detector/Pages/redHome.dart';
 import 'package:color_detector/Pages/settings.dart';
 import 'package:color_detector/Pages/signup_screen.dart';
+import 'package:color_detector/Theme/theme.dart';
+import 'package:color_detector/Theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:color_detector/Pages/signin_screen.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,7 +21,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp(camera: firstCamera));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: MyApp(camera: firstCamera),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,12 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Color Detector',
-      theme: ThemeData(
-        fontFamily: "Nunito",
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 46, 46, 46)),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       initialRoute: '/signin',
       routes: {
         '/signin': (context) => SignInScreen(),

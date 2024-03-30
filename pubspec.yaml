@@ -48,6 +48,7 @@ dependencies:
   wakelock_plus: ^1.1.4
   fluttertoast: ^8.2.4
   gradient_slide_to_act: ^0.0.2
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

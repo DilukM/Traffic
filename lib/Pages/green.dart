@@ -199,7 +199,9 @@ class _GreenState extends State<Green> {
                         left: 16,
                         right: 16,
                         child: Slider(
-                          activeColor: Color.fromARGB(255, 3, 65, 55),
+                          inactiveColor:
+                              Theme.of(context).colorScheme.secondary,
+                          activeColor: Theme.of(context).colorScheme.error,
                           value: _zoomLevel,
                           min: 1.0,
                           max: _maxZoomLevel,
@@ -227,26 +229,6 @@ class _GreenState extends State<Green> {
                     ],
                   ),
                 ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
-                // Container(
-                //   padding: const EdgeInsets.all(12),
-                //   decoration: BoxDecoration(
-                //     color: Colors.black.withOpacity(0.5),
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Text(
-                //       label == "green"
-                //           ? "Green color detected"
-                //           : "Color not detected",
-                //       style: const TextStyle(color: Colors.white),
-                //     ),
-                //   ),
-                // ),
-                //
               ],
             );
           } else {

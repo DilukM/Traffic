@@ -15,6 +15,7 @@ class _GreenHomeState extends State<GreenHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       bottomNavigationBar: BottomNav(
         currentIndex: 0, // Set current index according to the selected page
         onTap: (index) {
@@ -39,7 +40,8 @@ class _GreenHomeState extends State<GreenHome> {
             child: Text(
               "You choose alarm for green light",
               style: TextStyle(
-                  fontSize: 23, color: Color.fromARGB(255, 85, 84, 84)),
+                fontSize: 23,
+              ),
             ),
           ),
           Image.asset("assets/green1.png"),
@@ -55,7 +57,8 @@ class _GreenHomeState extends State<GreenHome> {
                 width: MediaQuery.of(context).size.width,
                 height: 60,
                 text: "Slide to set camera",
-                textStyle: TextStyle(color: Colors.black87),
+                textStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.tertiary),
                 submittedIcon: Icons.camera_alt_outlined,
                 backgroundColor: Colors.grey.withOpacity(0.3),
                 gradient: LinearGradient(colors: [

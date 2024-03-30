@@ -28,12 +28,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 85, bottom: 20),
             child: Text(
               "Choose your alarm",
               style: TextStyle(
-                  fontSize: 25, color: Color.fromARGB(255, 85, 84, 84)),
+                  fontSize: 25, color: Theme.of(context).colorScheme.tertiary),
             ),
           ),
           Image.asset("assets/2colors.png"),
@@ -42,15 +42,16 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(255, 189, 189, 189),
-                      blurRadius: 20,
+                      color: Theme.of(context).colorScheme.shadow,
+                      offset: Offset(0, -5),
+                      blurRadius: 10,
                       spreadRadius: 0,
                     )
                   ],
-                  color: Color.fromARGB(255, 233, 233, 233),
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(
                           top: 8, right: 12, left: 12, bottom: 30),
                       child: Row(
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                             "Choose your alarm",
                             style: TextStyle(
                                 fontSize: 20,
-                                color: Color.fromARGB(255, 111, 111, 111)),
+                                color: Theme.of(context).colorScheme.tertiary),
                           ),
                           Icon(
                             Icons.more_horiz,
