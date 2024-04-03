@@ -1,9 +1,11 @@
+import 'package:color_detector/Pages/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../reusable_widgets/reusablewidgets.dart';
+import 'home.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({
@@ -176,7 +178,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         User? user = userCredential.user;
                         if (user != null) {
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 300),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      HomePage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero)
+                                      .animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'email-already-in-use') {
@@ -264,7 +284,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.blueGrey)),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/signin');
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 300),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    SignInScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position:
+                        Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset.zero)
+                            .animate(animation),
+                    child: child,
+                  );
+                },
+              ),
+            );
           },
           child: const Text("Sign in",
               style:
@@ -296,7 +332,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Access the user's information
         final User? user = userCredential.user;
         if (user != null) {
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  HomePage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position:
+                      Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset.zero)
+                          .animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
         }
       }
     } catch (error) {

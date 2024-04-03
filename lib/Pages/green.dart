@@ -168,10 +168,10 @@ class _GreenState extends State<Green> {
     // Navigate after processing has been paused
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamed(context, '/home');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/settings');
+        Navigator.pushNamed(context, '/settings');
         break;
     }
   }

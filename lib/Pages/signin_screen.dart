@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:color_detector/Pages/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../reusable_widgets/reusablewidgets.dart';
+import 'home.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({
@@ -31,7 +33,22 @@ class _SignInScreenState extends State<SignInScreen> {
       });
       if (_user != null) {
         // User is already signed in, navigate to home page
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 300),
+            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position:
+                    Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset.zero)
+                        .animate(animation),
+                child: child,
+              );
+            },
+          ),
+        );
       }
     });
   }
@@ -138,7 +155,25 @@ class _SignInScreenState extends State<SignInScreen> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 300),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      HomePage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset.zero)
+                                      .animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         }
                       }).onError((error, stackTrace) {
                         print(error);
@@ -216,7 +251,23 @@ class _SignInScreenState extends State<SignInScreen> {
             style: TextStyle(color: Colors.blueGrey)),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/signup');
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 300),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    SignUpScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position:
+                        Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset.zero)
+                            .animate(animation),
+                    child: child,
+                  );
+                },
+              ),
+            );
           },
           child: const Text("Create one",
               style:
@@ -268,7 +319,23 @@ class _SignInScreenState extends State<SignInScreen> {
         if (user != null) {
           print("User is signed in: $user");
           // Navigate to the home page
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  HomePage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position:
+                      Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset.zero)
+                          .animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
           Fluttertoast.showToast(
             msg: "Signin Successful",
             toastLength: Toast.LENGTH_SHORT,
