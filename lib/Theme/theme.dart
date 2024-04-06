@@ -11,7 +11,7 @@ ThemeData lightMode = ThemeData(
     primary: Colors.grey.shade200,
     secondary: Colors.grey.shade300,
     shadow: const Color.fromARGB(145, 117, 117, 117),
-    tertiary: Colors.grey.shade700,
+    tertiary: Color.fromARGB(255, 41, 41, 41),
     error: Color.fromARGB(255, 4, 57, 39),
   ),
   useMaterial3: true,

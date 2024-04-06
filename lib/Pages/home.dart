@@ -1,6 +1,7 @@
 import 'package:color_detector/Pages/BottomNav.dart';
 import 'package:color_detector/Pages/redHome.dart';
 import 'package:color_detector/Pages/settings.dart';
+import 'package:color_detector/Pages/subscribe.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:color_detector/util/listTile.dart';
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                     color: Theme.of(context).colorScheme.tertiary),
               ),
             ),
-            Image.asset("assets/2colors.png"),
+            SizedBox(height: 330, child: Image.asset("assets/browncolors.png")),
             const SizedBox(
               height: 40,
             ),
@@ -78,85 +79,87 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30))),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 8, right: 12, left: 12, bottom: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Choose your alarm",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary),
-                            ),
-                            Icon(
-                              Icons.more_horiz,
-                              color: Color.fromARGB(255, 111, 111, 111),
-                            ),
-                          ],
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 20, right: 12, left: 12, bottom: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Choose your alarm",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary),
+                              ),
+                              Icon(
+                                Icons.more_horiz,
+                                color: Color.fromARGB(255, 111, 111, 111),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 300),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      RedHome(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset.zero)
-                                      .animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: const listTile(
-                          Imgpath: 'assets/red_dot.png',
-                          Title: 'Red light alarm',
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 300),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        RedHome(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero)
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: const listTile(
+                            Imgpath: 'assets/red_dot.png',
+                            Title: 'Red light alarm',
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 300),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      GreenHome(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                          begin: Offset(1.0, 0.0),
-                                          end: Offset.zero)
-                                      .animate(animation),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: const listTile(
-                          Imgpath: 'assets/green_dot.png',
-                          Title: 'Green light alarm',
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 300),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        Subscribe(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset.zero)
+                                        .animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: const listTile(
+                            Imgpath: 'assets/green_dot.png',
+                            Title: 'Green light alarm',
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -199,7 +199,7 @@ class _RedState extends State<Red> {
                         child: Slider(
                           inactiveColor:
                               Theme.of(context).colorScheme.secondary,
-                          activeColor: Theme.of(context).colorScheme.error,
+                          activeColor: Color(0xfff39060),
                           value: _zoomLevel,
                           min: 1.0,
                           max: _maxZoomLevel,

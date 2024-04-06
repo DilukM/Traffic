@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../reusable_widgets/reusablewidgets.dart';
+import '../util/reusablewidgets.dart';
 import 'home.dart';
 
 class SignInScreen extends StatefulWidget {

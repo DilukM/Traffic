@@ -86,19 +86,34 @@ class _GreenHomeState extends State<GreenHome> {
           SizedBox(
             height: 60,
             width: MediaQuery.of(context).size.width / 1.5,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 115, 201, 119)),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/green');
-                },
-                child: Text(
-                  "Click to set camera",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/green');
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment(0.8, 1),
+                      colors: <Color>[
+                        Color(0xfff39060),
+                        Color(0xffffb56b),
+                        Color(0xfff39060),
+                      ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                      tileMode: TileMode.mirror,
+                    ),
                   ),
-                )),
+                  child: Center(
+                    child: Text(
+                      "Click to set camera",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )),
+            ),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:color_detector/Pages/signin_screen.dart';
 import 'package:color_detector/Theme/theme_provider.dart';
+import 'package:color_detector/util/settingsButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,20 +49,22 @@ class _SettingsPageState extends State<SettingsPage> {
           }
         },
       ),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios)),
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.tertiary,
-              )),
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 signOut();
               },
-              child: const Text('Logout'),
+              child: SettingsButton(Title: "Signout"),
             ),
             // ElevatedButton(
             //   style: ButtonStyle(
