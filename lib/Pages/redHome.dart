@@ -37,7 +37,7 @@ class _RedHomeState extends State<RedHome> {
               ),
             ),
           ),
-          Image.asset("assets/red1.png"),
+          Image.asset("assets/red2.png"),
           const SizedBox(
             height: 70,
           ),
@@ -55,9 +55,9 @@ class _RedHomeState extends State<RedHome> {
                       begin: Alignment.topLeft,
                       end: Alignment(0.8, 1),
                       colors: <Color>[
-                        Color(0xfff39060),
-                        Color(0xffffb56b),
-                        Color(0xfff39060),
+                        Color(0xff52b5b5),
+                        Color(0xff20dcdc),
+                        Color(0xff52b5b5),
                       ], // Gradient from https://learnui.design/tools/gradient-generator.html
                       tileMode: TileMode.mirror,
                     ),

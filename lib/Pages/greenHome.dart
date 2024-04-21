@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:color_detector/Pages/home.dart';
 import 'package:color_detector/Pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
-import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 
 class GreenHome extends StatefulWidget {
   const GreenHome({
@@ -79,7 +77,7 @@ class _GreenHomeState extends State<GreenHome> {
               ),
             ),
           ),
-          Image.asset("assets/green1.png"),
+          Image.asset("assets/green2.png"),
           SizedBox(
             height: 70,
           ),
@@ -97,10 +95,10 @@ class _GreenHomeState extends State<GreenHome> {
                       begin: Alignment.topLeft,
                       end: Alignment(0.8, 1),
                       colors: <Color>[
-                        Color(0xfff39060),
-                        Color(0xffffb56b),
-                        Color(0xfff39060),
-                      ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                        Color(0xff52b5b5),
+                        Color(0xff20dcdc),
+                        Color(0xff52b5b5),
+                      ],
                       tileMode: TileMode.mirror,
                     ),
                   ),

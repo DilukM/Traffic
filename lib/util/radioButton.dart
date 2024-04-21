@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
-class SettingsButton extends StatelessWidget {
+class RadioButton extends StatelessWidget {
   final String Title;
   late bool selected;
-  SettingsButton({
+  late Color color1;
+  late Color color2;
+
+  RadioButton({
     super.key,
     required this.Title,
     required this.selected,
+    required this.color1,
+    required this.color2,
   });
 
   @override
@@ -48,17 +53,12 @@ class SettingsButton extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment(0.8, 1),
-                    colors: selected
-                        ? <Color>[
-                            Color.fromARGB(255, 186, 186, 186),
-                            Color.fromARGB(255, 233, 233, 233),
-                            Color.fromARGB(255, 186, 186, 186),
-                          ]
-                        : <Color>[
-                            Color(0xff52b5b5),
-                            Color(0xff20dcdc),
-                            Color(0xff52b5b5),
-                          ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                    colors: <Color>[
+                      color1,
+                      color2,
+                      color1,
+                    ],
+                    // Gradient from https://learnui.design/tools/gradient-generator.html
                     tileMode: TileMode.mirror,
                   ),
                 ),

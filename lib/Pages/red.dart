@@ -1,8 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
+import 'package:color_detector/util/shape.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Red extends StatefulWidget {
@@ -15,8 +17,7 @@ class Red extends StatefulWidget {
 
 class _RedState extends State<Red> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-  Color detectedColor = Colors.transparent;
+  Future<void>? _initializeControllerFuture;
   double _zoomLevel = 1.0;
   double _maxZoomLevel = 5.0;
 
@@ -25,17 +26,28 @@ class _RedState extends State<Red> {
   final player = AudioPlayer();
   bool _isAlarmPlaying = false;
   bool _isProcessingPaused = false;
+  late SharedPreferences _prefs;
+  late String _customAlarmPath;
+  late String selectedOption;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = CameraController(widget.camera, ResolutionPreset.high);
-    _initializeControllerFuture = _controller.initialize().then((_) async {
-      await _tfLiteInit();
-      if (!_isProcessingPaused) {
-        await _startStreaming();
-      }
+    // Initialize SharedPreferences
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+      // Retrieve custom alarm path from SharedPreferences
+      _customAlarmPath = _prefs.getString('customAlarmPath') ?? '';
+      selectedOption = _prefs.getString('selectedOption') ?? '';
+      // Initialize camera controller
+      _controller = CameraController(widget.camera, ResolutionPreset.high);
+      _initializeControllerFuture = _controller.initialize().then((_) async {
+        await _tfLiteInit();
+        if (!_isProcessingPaused) {
+          await _startStreaming();
+        }
+      });
     });
   }
 
@@ -70,7 +82,7 @@ class _RedState extends State<Red> {
         bytesList: image.planes.map((plane) {
           return plane.bytes;
         }).toList(),
-        imageHeight: image.height,
+        imageHeight: MediaQuery.of(context).size.height.toInt(),
         imageWidth: image.width,
         imageMean: 0.0,
         imageStd: 255.0,
@@ -83,57 +95,47 @@ class _RedState extends State<Red> {
         setState(() {
           label = '';
           confidence = 0.0;
-          detectedColor =
-              Colors.transparent; // No color detected, set as transparent
+
           if (_isAlarmPlaying) {
             player.pause(); // Pause the alarm sound
             _isAlarmPlaying = false;
           }
         });
       } else {
-        Color detectedColor =
-            _getColorFromLabel(recognitions[0]['label'].toString());
-
+        setState(() {
+          confidence = recognitions[0]['confidence'] * 100;
+          label = recognitions[0]['label'].toString();
+          // Set detected color
+        });
         //Logic to check detected color and confidence level
-        if (detectedColor == Colors.red && recognitions[0]['confidence'] == 1) {
-          setState(() {
-            confidence = recognitions[0]['confidence'] * 100;
-            label = recognitions[0]['label'].toString();
-            this.detectedColor = detectedColor; // Set detected color
-          });
-
+        if (recognitions[0]['label'].toString() == 'red' &&
+            recognitions[0]['confidence'] == 1) {
           // Play alarm sound when red color is detected
           if (!_isAlarmPlaying) {
-            player.play(AssetSource('alarm.mp3'));
-            player.onPlayerComplete.listen((event) {
-              player.play(
-                AssetSource('alarm.mp3'),
-              );
-            });
+            if (_customAlarmPath.isEmpty) {
+              player.play(AssetSource(selectedOption));
+              player.onPlayerComplete.listen((event) {
+                player.play(
+                  AssetSource(selectedOption),
+                );
+              });
+            } else {
+              player.play(DeviceFileSource(_customAlarmPath));
+              player.onPlayerComplete.listen((event) {
+                player.play(
+                  DeviceFileSource(_customAlarmPath),
+                );
+              });
+            }
             _isAlarmPlaying = true;
           }
         } else {
           setState(() {
-            label = '';
-            confidence = 0.0;
-            this.detectedColor =
-                Colors.transparent; // Set as transparent for other colors
-            if (_isAlarmPlaying) {
-              player.pause(); // Pause the alarm sound
-              _isAlarmPlaying = false;
-            }
+            confidence = recognitions[0]['confidence'] * 100;
+            label = recognitions[0]['label'].toString();
           });
         }
       }
-    }
-  }
-
-  Color _getColorFromLabel(String label) {
-    switch (label) {
-      case 'red':
-        return Colors.red;
-      default:
-        return Colors.transparent;
     }
   }
 
@@ -153,14 +155,9 @@ class _RedState extends State<Red> {
       // Stop image stream
       _controller.stopImageStream();
 
-      // Pause the alarm sound if playing
-      if (_isAlarmPlaying) {
-        player.pause();
-        _isAlarmPlaying = false;
-      }
-
-      // Set detected color to transparent
-      detectedColor = Colors.transparent;
+      // Pause the alarm sound
+      player.pause();
+      _isAlarmPlaying = false;
     });
 
     // Navigate after processing has been paused
@@ -192,14 +189,33 @@ class _RedState extends State<Red> {
                   child: Stack(
                     children: [
                       CameraPreview(_controller),
+                      ClipPath(
+                        clipper: RectangularHoleClipper(
+                            holeWidth: MediaQuery.of(context).size.width * 0.65,
+                            holeHeight:
+                                MediaQuery.of(context).size.width * 0.85,
+                            borderRadius: 25), // Adjust hole size as needed
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 1.77,
+                          color: Colors.black45,
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 150,
+                      //   left: 150,
+                      //   child: Text(
+                      //     label + ' ' + confidence.toString(),
+                      //     style: TextStyle(fontSize: 16, color: Colors.white),
+                      //   ),
+                      // ),
                       Positioned(
-                        bottom: 16,
+                        bottom: 120,
                         left: 16,
                         right: 16,
                         child: Slider(
-                          inactiveColor:
-                              Theme.of(context).colorScheme.secondary,
-                          activeColor: Color(0xfff39060),
+                          inactiveColor: Colors.white30,
+                          activeColor: Colors.white,
                           value: _zoomLevel,
                           min: 1.0,
                           max: _maxZoomLevel,
@@ -209,17 +225,49 @@ class _RedState extends State<Red> {
                         ),
                       ),
                       Positioned(
-                        bottom: 120,
-                        right: 16,
+                          bottom: 0,
+                          width: MediaQuery.of(context).size.width,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 100,
+                            color: Colors.white,
+                          )),
+                      Positioned(
+                        bottom: 16,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: detectedColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey, width: 2),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_isAlarmPlaying) {
+                                player.pause(); // Pause the alarm sound
+                                _isAlarmPlaying = false;
+                              }
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment(0.8, 1),
+                                  colors: <Color>[
+                                    Color(0xff52b5b5),
+                                    Color(0xff20dcdc),
+                                    Color(0xff52b5b5),
+                                  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                                  tileMode: TileMode.mirror,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Stop Alarm",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),

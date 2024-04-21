@@ -33,7 +33,7 @@ class _SubscribeState extends State<Subscribe> {
                 fontSize: 23,
               ),
             ),
-            Image.asset("assets/Pay.png"),
+            Image.asset("assets/Pay1.png"),
             SizedBox(
                 width: MediaQuery.of(context).size.width / 1.1,
                 child: GestureDetector(

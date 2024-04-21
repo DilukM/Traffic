@@ -6,7 +6,7 @@ Padding subscriptionCard(BuildContext context, String title, String content,
   return Padding(
     padding: const EdgeInsets.only(bottom: 15),
     child: Card(
-      color: const Color.fromARGB(255, 249, 238, 220),
+      color: Color.fromARGB(255, 220, 249, 246),
       elevation: 6,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -17,9 +17,9 @@ Padding subscriptionCard(BuildContext context, String title, String content,
                   begin: Alignment.topLeft,
                   end: Alignment(0.8, 1),
                   colors: <Color>[
-                    Color(0xfff39060),
-                    Color(0xffffb56b),
-                    Color(0xfff39060),
+                    Color(0xff52b5b5),
+                    Color(0xff20dcdc),
+                    Color(0xff52b5b5),
                   ], // Gradient from https://learnui.design/tools/gradient-generator.html
                   tileMode: TileMode.mirror,
                 ),
@@ -60,7 +60,7 @@ Padding subscriptionCard(BuildContext context, String title, String content,
                       "$cost USD",
                       style: const TextStyle(
                           fontSize: 25,
-                          color: Colors.orangeAccent,
+                          color: Color(0xff52b5b5),
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
@@ -69,7 +69,7 @@ Padding subscriptionCard(BuildContext context, String title, String content,
                       "per $range",
                       style: const TextStyle(
                           fontSize: 16,
-                          color: Colors.orangeAccent,
+                          color: Color(0xff52b5b5),
                           fontWeight: FontWeight.bold),
                     ),
                   ],
