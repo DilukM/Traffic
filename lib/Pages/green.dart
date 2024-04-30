@@ -67,7 +67,7 @@ class _GreenState extends State<Green> {
 
   Future<void> _tfLiteInit() async {
     await Tflite.loadModel(
-      model: "assets/model_unquant.tflite",
+      model: "assets/model.tflite",
       labels: "assets/labels.txt",
       numThreads: 1,
       isAsset: true,

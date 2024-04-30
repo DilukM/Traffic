@@ -25,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late String selectedOption = "alarm.mp3";
   late String _value = "alarm.mp3";
   final player = AudioPlayer();
+  bool soundOn = false;
 
   @override
   void initState() {
@@ -38,6 +39,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
       selected = _customAlarmPath.isEmpty ? true : false;
       _loadSelectedOption();
+
+      if (_value.isEmpty) {
+        _setAlarmTone("alarm.mp3");
+      }
     });
   }
 
@@ -86,6 +91,23 @@ class _SettingsPageState extends State<SettingsPage> {
         },
       ),
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  soundOn = !soundOn;
+                });
+              },
+              icon: soundOn
+                  ? Icon(
+                      Icons.notifications_off,
+                      color: Color(0xff52b5b5),
+                    )
+                  : Icon(
+                      Icons.notifications_on,
+                      color: Color(0xff52b5b5),
+                    ))
+        ],
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -247,6 +269,8 @@ class _SettingsPageState extends State<SettingsPage> {
       selectedOption = value;
     });
     await prefs.setString('selectedOption', value);
-    player.play(AssetSource(selectedOption));
+    if (soundOn) {
+      player.play(AssetSource(selectedOption));
+    }
   }
 }
