@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tflite/flutter_tflite.dart';
+
+import 'package:tflite_v2/tflite_v2.dart';
 import 'dart:async';
 
 import 'package:color_detector/Pages/BottomNav.dart';
@@ -75,6 +76,16 @@ class _GreenState extends State<Green> {
     );
   }
 
+  Future<void> _tfLite2Init() async {
+    await Tflite.loadModel(
+      model: "assets/model.tflite",
+      labels: "assets/labels.txt",
+      numThreads: 1,
+      isAsset: true,
+      useGpuDelegate: false,
+    );
+  }
+
   Future<void> _startStreaming() async {
     await _controller.startImageStream((CameraImage image) {
       _processImage(image);
@@ -112,7 +123,7 @@ class _GreenState extends State<Green> {
         });
         //Logic to check detected color and confidence level
         if (recognitions[0]['label'].toString() == "green" &&
-            recognitions[0]['confidence'] == 1) {
+            recognitions[0]['confidence'] >= 0.8) {
           if (!_isAlarmPlaying) {
             if (_customAlarmPath.isEmpty) {
               player.play(AssetSource(selectedOption));

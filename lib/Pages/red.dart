@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
 import 'package:color_detector/util/shape.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tflite/flutter_tflite.dart';
+import 'package:tflite_v2/tflite_v2.dart';
 import 'package:color_detector/Pages/BottomNav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -109,7 +109,7 @@ class _RedState extends State<Red> {
         });
         //Logic to check detected color and confidence level
         if (recognitions[0]['label'].toString() == 'red' &&
-            recognitions[0]['confidence'] == 1) {
+            recognitions[0]['confidence'] >= 0.8) {
           // Play alarm sound when red color is detected
           if (!_isAlarmPlaying) {
             if (_customAlarmPath.isEmpty) {
