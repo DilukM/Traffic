@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
-import 'package:color_detector/util/shape.dart';
 import 'package:flutter/material.dart';
+
 import 'package:tflite_v2/tflite_v2.dart';
+import 'dart:async';
+
 import 'package:color_detector/Pages/BottomNav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+
+import '../util/shape.dart';
 
 class Red extends StatefulWidget {
   final CameraDescription camera;
@@ -15,9 +20,10 @@ class Red extends StatefulWidget {
   State<Red> createState() => _RedState();
 }
 
-class _RedState extends State<Red> {
+class _RedState extends State<Red> with WidgetsBindingObserver {
   late CameraController _controller;
   Future<void>? _initializeControllerFuture;
+
   double _zoomLevel = 1.0;
   double _maxZoomLevel = 5.0;
 
@@ -29,10 +35,14 @@ class _RedState extends State<Red> {
   late SharedPreferences _prefs;
   late String _customAlarmPath;
   late String selectedOption;
+  bool _isStopped = false; // To ensure stopProcessing is called only once
+  bool _isProcessing = false; // To prevent overlapping processing calls
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     // Initialize SharedPreferences
     SharedPreferences.getInstance().then((prefs) {
@@ -77,7 +87,11 @@ class _RedState extends State<Red> {
   }
 
   Future<void> _processImage(CameraImage image) async {
-    if (mounted && !_isProcessingPaused) {
+    if (mounted && !_isProcessingPaused && !_isProcessing) {
+      setState(() {
+        _isProcessing = true;
+      });
+
       var recognitions = await Tflite.runModelOnFrame(
         bytesList: image.planes.map((plane) {
           return plane.bytes;
@@ -95,7 +109,6 @@ class _RedState extends State<Red> {
         setState(() {
           label = '';
           confidence = 0.0;
-
           if (_isAlarmPlaying) {
             player.pause(); // Pause the alarm sound
             _isAlarmPlaying = false;
@@ -103,14 +116,12 @@ class _RedState extends State<Red> {
         });
       } else {
         setState(() {
-          confidence = recognitions[0]['confidence'] * 100;
+          confidence = (recognitions[0]['confidence'] * 100);
           label = recognitions[0]['label'].toString();
-          // Set detected color
         });
-        //Logic to check detected color and confidence level
-        if (recognitions[0]['label'].toString() == 'red' &&
+        // Logic to check detected color and confidence level
+        if (recognitions[0]['label'].toString() == "red" &&
             recognitions[0]['confidence'] >= 0.8) {
-          // Play alarm sound when red color is detected
           if (!_isAlarmPlaying) {
             if (_customAlarmPath.isEmpty) {
               player.play(AssetSource(selectedOption));
@@ -136,19 +147,37 @@ class _RedState extends State<Red> {
           });
         }
       }
+
+      setState(() {
+        _isProcessing = false;
+      });
     }
   }
 
   @override
   void dispose() {
+    _stopProcessing();
     _controller.dispose();
     Tflite.close();
     player.dispose();
-    super.dispose();
     WakelockPlus.disable();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
-  void _toggleProcessingAndNavigate(int index) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _stopProcessing();
+    }
+  }
+
+  void _stopProcessing() {
+    if (_isStopped) return;
+
+    _isStopped = true;
     setState(() {
       _isProcessingPaused = true; // Pause processing
 
@@ -158,7 +187,12 @@ class _RedState extends State<Red> {
       // Pause the alarm sound
       player.pause();
       _isAlarmPlaying = false;
+      player.dispose();
     });
+  }
+
+  void _toggleProcessingAndNavigate(int index) {
+    _stopProcessing();
 
     // Navigate after processing has been paused
     switch (index) {
@@ -176,7 +210,7 @@ class _RedState extends State<Red> {
     WakelockPlus.enable();
     return Scaffold(
       bottomNavigationBar: BottomNav(
-        currentIndex: 0, // Set current index according to the selected page
+        currentIndex: 0,
         onTap: _toggleProcessingAndNavigate,
       ),
       body: FutureBuilder<void>(
@@ -201,14 +235,6 @@ class _RedState extends State<Red> {
                           color: Colors.black45,
                         ),
                       ),
-                      // Positioned(
-                      //   bottom: 150,
-                      //   left: 150,
-                      //   child: Text(
-                      //     label + ' ' + confidence.toString(),
-                      //     style: TextStyle(fontSize: 16, color: Colors.white),
-                      //   ),
-                      // ),
                       Positioned(
                         bottom: 120,
                         left: 16,
@@ -233,6 +259,19 @@ class _RedState extends State<Red> {
                             color: Colors.white,
                           )),
                       Positioned(
+                        top: 50,
+                        left: 20,
+                        child: IconButton(
+                            onPressed: () async {
+                              _stopProcessing();
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            )),
+                      ),
+                      Positioned(
                         bottom: 16,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -248,18 +287,18 @@ class _RedState extends State<Red> {
                               height: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment(0.8, 1),
                                   colors: <Color>[
                                     Color(0xff52b5b5),
                                     Color(0xff20dcdc),
                                     Color(0xff52b5b5),
-                                  ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                                  ],
                                   tileMode: TileMode.mirror,
                                 ),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Stop Alarm",
                                   style: TextStyle(
@@ -278,7 +317,7 @@ class _RedState extends State<Red> {
               ],
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

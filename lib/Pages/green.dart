@@ -20,7 +20,7 @@ class Green extends StatefulWidget {
   State<Green> createState() => _GreenState();
 }
 
-class _GreenState extends State<Green> {
+class _GreenState extends State<Green> with WidgetsBindingObserver {
   late CameraController _controller;
   Future<void>? _initializeControllerFuture;
 
@@ -35,10 +35,14 @@ class _GreenState extends State<Green> {
   late SharedPreferences _prefs;
   late String _customAlarmPath;
   late String selectedOption;
+  bool _isStopped = false; // To ensure stopProcessing is called only once
+  bool _isProcessing = false; // To prevent overlapping processing calls
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     // Initialize SharedPreferences
     SharedPreferences.getInstance().then((prefs) {
@@ -76,16 +80,6 @@ class _GreenState extends State<Green> {
     );
   }
 
-  Future<void> _tfLite2Init() async {
-    await Tflite.loadModel(
-      model: "assets/model.tflite",
-      labels: "assets/labels.txt",
-      numThreads: 1,
-      isAsset: true,
-      useGpuDelegate: false,
-    );
-  }
-
   Future<void> _startStreaming() async {
     await _controller.startImageStream((CameraImage image) {
       _processImage(image);
@@ -93,7 +87,11 @@ class _GreenState extends State<Green> {
   }
 
   Future<void> _processImage(CameraImage image) async {
-    if (mounted && !_isProcessingPaused) {
+    if (mounted && !_isProcessingPaused && !_isProcessing) {
+      setState(() {
+        _isProcessing = true;
+      });
+
       var recognitions = await Tflite.runModelOnFrame(
         bytesList: image.planes.map((plane) {
           return plane.bytes;
@@ -121,7 +119,7 @@ class _GreenState extends State<Green> {
           confidence = (recognitions[0]['confidence'] * 100);
           label = recognitions[0]['label'].toString();
         });
-        //Logic to check detected color and confidence level
+        // Logic to check detected color and confidence level
         if (recognitions[0]['label'].toString() == "green" &&
             recognitions[0]['confidence'] >= 0.8) {
           if (!_isAlarmPlaying) {
@@ -149,19 +147,37 @@ class _GreenState extends State<Green> {
           });
         }
       }
+
+      setState(() {
+        _isProcessing = false;
+      });
     }
   }
 
   @override
   void dispose() {
+    _stopProcessing();
     _controller.dispose();
     Tflite.close();
     player.dispose();
-    super.dispose();
     WakelockPlus.disable();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
-  void _toggleProcessingAndNavigate(int index) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _stopProcessing();
+    }
+  }
+
+  void _stopProcessing() {
+    if (_isStopped) return;
+
+    _isStopped = true;
     setState(() {
       _isProcessingPaused = true; // Pause processing
 
@@ -171,7 +187,12 @@ class _GreenState extends State<Green> {
       // Pause the alarm sound
       player.pause();
       _isAlarmPlaying = false;
+      player.dispose();
     });
+  }
+
+  void _toggleProcessingAndNavigate(int index) {
+    _stopProcessing();
 
     // Navigate after processing has been paused
     switch (index) {
@@ -229,12 +250,6 @@ class _GreenState extends State<Green> {
                           },
                         ),
                       ),
-                      // Positioned(
-                      //   bottom: 150,
-                      //   left: 16,
-                      //   right: 16,
-                      //   child: Text(label + ' ' + confidence.toString()),
-                      // ),
                       Positioned(
                           bottom: 0,
                           width: MediaQuery.of(context).size.width,
@@ -243,6 +258,19 @@ class _GreenState extends State<Green> {
                             height: 100,
                             color: Colors.white,
                           )),
+                      Positioned(
+                        top: 50,
+                        left: 20,
+                        child: IconButton(
+                            onPressed: () async {
+                              _stopProcessing();
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            )),
+                      ),
                       Positioned(
                         bottom: 16,
                         child: Padding(
